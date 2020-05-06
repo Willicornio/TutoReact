@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import { connectDB } from './connect-db';
 import './initialize-db';
 import { authenticationRoute } from './authenticate';
+import path from 'path';
 
 let port = 8888;
 let app = express();
@@ -22,12 +23,29 @@ app.use(
 
 authenticationRoute(app);
 
+//NO ESTA EN EL HEROKU
+
+export const addNewUser = async user => {
+    let db = await connectDB();
+    let collection = db.collection(`users`);
+    await collection.insertOne(user);
+    console.log("Parece que sí que se ha añadido");
+}
+
 export const addNewTask = async task => {
     let db = await connectDB();
     let collection = db.collection(`tasks`);
     await collection.insertOne(task);
     console.log("Parece que sí que se ha añadido");
 }
+
+export const addNewComment = async comment => {
+    let db = await connectDB();
+    let collection = db.collection(`comments`);
+    await collection.insertOne(comment);
+    console.log("Parece que sí que se ha añadido");
+}
+
 
 export const updateTask = async task => {
     let { id, group, isComplete, name } = task;
@@ -47,24 +65,6 @@ export const updateTask = async task => {
 
 }
 
-// app.get('/getAll', async (req, res) =>{
-
-//     let db = await connectDB();
-
-//     let tasks = await db.collection(`tasks`);
-//     let groups = await db.collection(`groups`);
-//     let users = await db.collection(`users`);
-
-//     const all ={
-//         task: tasks,
-//         groups: groups,
-//         users: users
-//     }
-
-//     // console.log("tareas:  " + tasks + "    groups   :" + groups + "   users    :  " + users);
-//     res.status(200).send({alll})
-// });
-
 app.post('/task/new', async (req, res) => {
     let task = req.body.task;
     console.log(task);
@@ -78,3 +78,16 @@ app.post('/task/update', async (req, res) => {
     await updateTask(task);
     res.status(200).send();
 });
+
+app.post('/comment/new', async (req, res) =>{
+    let comment = req.body.comment;
+    await addNewComment(comment);
+    console.log(req.body.comment);
+})
+
+
+app.post('/user/new', async (req, res) => {
+    let user = req.body.user;
+    console.log(req.body.user);
+    await addNewUser(user);
+})

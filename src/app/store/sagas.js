@@ -5,10 +5,11 @@ import { v4 as uuidv4 } from 'uuid';
 import {history} from './history';
 
 import * as mutations from './mutation';
+import md5 from 'md5';
 
 const url = "http://localhost:8888";
 
-export default function* taskCreationSaga() {
+export  function* taskCreationSaga() {
     while (true) {
         const { groupID } = yield take(mutations.REQUEST_TASK_CREATION);
         const ownerID = `U1`;
@@ -21,6 +22,53 @@ export default function* taskCreationSaga() {
                 owner: ownerID,
                 isComplete: false,
                 name: "New task"
+            }
+        });
+
+        console.info("Tenemos respuesta ,", res);
+    }
+}
+
+// id: "U2",
+// name: "PICHÓN VOLADOR",
+// passwordHash:md5("willi"),
+// friends: []
+
+export  function* userCreationSaga() {
+    while (true) {
+        const { username, password } = yield take(mutations.REQUEST_USER_CREATION);
+        const friends = [];
+        const ID = uuidv4();
+        yield put(mutations.createUser(ID, username, password, friends));
+        const { res } = yield axios.post(url + `/user/new`, {
+            user: {
+                id: ID,
+                name: username,
+                passwordHash: md5(password),
+                friends: friends
+            }
+        });
+
+        console.info("Tenemos respuesta ,", res);
+        history.push(`/login`);
+
+    }
+}
+
+
+export  function* taskCreationCommentSaga() {
+    while (true) {
+        const { content, taskID } = yield take(mutations.REQUEST_COMMENT_CREATION);
+        const ownerID = `U1`;
+        const commentID = uuidv4();
+        
+        yield put(mutations.createTask(ownerID, commentID, taskID, content ));
+        const { res } = yield axios.post(url + `/comment/new`, {
+            comment: {
+                owner: ownerID,
+                id: commentID,
+                task: taskID,
+                content: content
             }
         });
 

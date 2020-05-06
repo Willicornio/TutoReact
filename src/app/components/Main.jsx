@@ -7,6 +7,7 @@ import { Router, Route, Redirect} from 'react-router-dom';
 import { history } from '../store/history';
 import { ConnectedNavigation } from './Navigation';
 import { ConnectTaskDetail } from './TaskDetail';
+import { ConnectedCreateUser } from './CreateUser';
 // import { Redirect } from 'react-router';
 
 
@@ -29,6 +30,7 @@ export const Main = () => (
                 <Route exact path="/login" component={ConnetedLogin}></Route>
                 <Route exact path="/dashboard" render={RouteGuard(ConnectedDashBoard)}></Route>
                 <Route exact path="/task/:id" render={RouteGuard(ConnectTaskDetail)}></Route>
+                <Route exact path="/createuser" component= {ConnectedCreateUser}></Route>
             </div>
         </Provider>
     </Router>

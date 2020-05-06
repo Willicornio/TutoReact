@@ -15,16 +15,25 @@ import { select } from 'redux-saga/effects';
 
 export const store = createStore(
     combineReducers({
+
+        username(name = "", action) {
+            switch (action.type) {
+                case mutations.SET_STATE:
+                    return action.state.username;
+                default:
+                    return name;
+            }
+        },
         session(userSession = defaultState.session || {}, action) {
             let { type, authenticated, session } = action;
             switch (type) {
                 case mutations.SET_STATE:
-                    return {...userSession, id: action.state.session.id}
+                    return { ...userSession, id: action.state.session.id }
                 case mutations.REQUEST_AUTHENTICATE_USER:
-                    return { ...userSession, authenticated:mutations.AUTHENTICATING }
+                    return { ...userSession, authenticated: mutations.AUTHENTICATING }
 
                 case mutations.PROCESSING_AUTHENTICATE_USER:
-                    return {...userSession, authenticated}
+                    return { ...userSession, authenticated }
 
                 default:
                     return userSession;
@@ -65,19 +74,36 @@ export const store = createStore(
             return tasks;
 
         },
-        comments(comments = []) {
+        comments(comments = [], action) {
+            switch (action.type) {
+                case mutations.SET_STATE:
+                    return action.state.comments;
+                case mutations.CREATE_COMMENT:
+                    return [...comments, {
+                        ownerID: action.ownerID,
+                        commentID: action.commentID,
+                        taskID: action.taskID,
+                        content: action.content
+                    }];
+            }
+
             return comments;
         },
         groups(groups = [], action) {
-            switch (action.type)
-            {
+            switch (action.type) {
                 case mutations.SET_STATE:
                     return action.state.groups;
             }
-        
+
             return groups;
         },
-        users(users = []) {
+        users(users = [], action) {
+            switch(action.type){
+                case mutations.CREATE_USER:
+                    return[{
+                        
+                    }]
+            }
             return users;
         }
     })
