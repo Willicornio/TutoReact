@@ -35,7 +35,7 @@
     "nodemon": "^1.18.4",
     "style-loader": "^0.23.0",
     "webpack": "^4.42.1",
-    "webpack-cli": "^3.1.2",
+    "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
@@ -51,6 +51,6 @@
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.2",
     "uuid": "^7.0.3",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.3.12"
   }
 }
